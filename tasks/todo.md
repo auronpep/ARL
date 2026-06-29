@@ -40,3 +40,30 @@ Boundary:
 
 - Synthetic fixtures prove tooling only.
 - Real proof still requires importing private Con Law questions with keys, dominant traps, expected mechanics, and sealed holdout data.
+
+## 2026-06-29 Private Con Law Set 1 Import
+
+- [x] Copy `ConLaw_Set1.xlsx` and `Con_Law_Study_Tactics.md` into ignored private source storage.
+- [x] Add a repeatable XLSX/strategy import tool.
+- [x] Generate private Con Law question JSONL and strategy mechanics candidates.
+- [x] Verify row counts, answer distribution, ignored private outputs, and tests.
+
+Review:
+
+- Private source copies:
+  - `data/private/conlaw/source/ConLaw_Set1.xlsx`
+  - `data/private/conlaw/source/Con_Law_Study_Tactics.md`
+- Private generated outputs:
+  - `data/private/conlaw/questions_set1.jsonl`
+  - `data/private/conlaw/questions_dev.jsonl`
+  - `data/private/conlaw/questions_holdout.jsonl`
+  - `data/private/conlaw/answer_key_set1.jsonl`
+  - `data/private/conlaw/choice_forensics_set1.jsonl`
+  - `data/private/conlaw/strategy_mechanics_candidates.yaml`
+- Public proof summary: `data/processed/conlaw_set1_import_summary.json`
+- Import summary: 146 total questions, 117 dev, 29 holdout, 584 choice-forensics rows, answer counts A=33/B=37/C=33/D=43.
+- Initial strategy tagging: 105 questions with expected mechanics/dominant-trap mechanic, 41 unclassified for follow-up review.
+- Shape counts: actor/source-power 30, classification/equal-protection 40, threshold 34, clause-home 1, unclassified 41.
+- Markdown strategy extraction produced 10 private candidate mechanics signals.
+- `git check-ignore -v` confirmed private source and generated question files are ignored by `.gitignore`.
+- `uv run pytest` passed: 9 tests.

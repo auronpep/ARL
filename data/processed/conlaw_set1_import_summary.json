@@ -1,0 +1,23 @@
+{
+  "answer_counts": {
+    "A": 33,
+    "B": 37,
+    "C": 33,
+    "D": 43
+  },
+  "answer_key": 146,
+  "choice_forensics": 584,
+  "dev": 117,
+  "holdout": 29,
+  "questions": 146,
+  "questions_with_dominant_trap_mechanic": 105,
+  "questions_with_expected_mechanics": 105,
+  "shape_counts": {
+    "actor_source_power": 30,
+    "classification_equal_protection": 40,
+    "clause_home": 1,
+    "threshold": 34,
+    "unclassified": 41
+  },
+  "strategy_candidates": 10
+}
