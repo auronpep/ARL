@@ -1,0 +1,421 @@
+version: "0.1"
+subject: CONSTITUTIONAL_LAW
+cards:
+  - id: CONLAW-ACTOR-FIRST-01
+    subject: CONSTITUTIONAL_LAW
+    group: A_actor_source_power
+    mechanic_type: routing_mechanic
+    trigger: "Question asks whether a statute or government action is valid."
+    visible_signal:
+      location: call
+      exact_signal: "statute"
+    move: "Identify the actor before choosing doctrine: federal actor needs enumerated power; state actor needs a constitutional limit."
+    contraindications:
+      - "Do not skip actor check just because an answer choice names a familiar clause."
+    distractor_patterns:
+      - "Wrong actor"
+      - "Wrong amendment against the actor"
+    cut_clash_call_role: CUT
+    student_script: "Actor first. Federal needs power. State needs limit."
+    ten_year_old_check: "Can the student point to federal or state before reading the answer array?"
+    positive_examples:
+      - qid: Q-CONLAW-001
+        note: "Federal spending statute."
+    negative_examples:
+      - qid: Q-CONLAW-003
+        note: "Weakest-clause question needs clause strength after actor."
+    unlocks:
+      traps:
+        - wrong_actor
+      question_shapes:
+        - actor_source_power
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Overused when the call is not about validity or constitutional basis."
+    compression_status: keep
+  - id: CONLAW-FEDERAL-ENUMERATED-POWER-01
+    subject: CONSTITUTIONAL_LAW
+    group: A_actor_source_power
+    mechanic_type: routing_mechanic
+    trigger: "Federal statute validity."
+    visible_signal:
+      location: stem
+      exact_signal: "Congress enacts"
+    move: "Look for an enumerated power or necessary-and-proper link."
+    contraindications:
+      - "Do not treat general welfare as a free-standing lawmaking power."
+    distractor_patterns:
+      - "Free-floating federal general welfare power"
+    cut_clash_call_role: CUT
+    student_script: "Federal law needs a listed power."
+    ten_year_old_check: "Can the student ask what power Congress is using?"
+    positive_examples:
+      - qid: Q-CONLAW-001
+        note: "Congress uses spending hook."
+    negative_examples: []
+    unlocks:
+      traps:
+        - free_standing_general_welfare
+      question_shapes:
+        - actor_source_power
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "May duplicate actor-first unless a specific enumerated-power miss exists."
+    compression_status: merge_candidate
+  - id: CONLAW-FEDERAL-POLICE-POWER-BAIT-01
+    subject: CONSTITUTIONAL_LAW
+    group: F_high_frequency_bait
+    mechanic_type: distractor_frequency_card
+    trigger: "Answer choice offers federal police power."
+    visible_signal:
+      location: answer_choice
+      exact_signal: "federal police power"
+    move: "Cut federal police power unless the question is about a narrow federal enclave or other rare exception."
+    contraindications:
+      - "Do not use this to cut state police power."
+    distractor_patterns:
+      - "Federal police power"
+    cut_clash_call_role: CUT
+    student_script: "Federal police power is bait."
+    ten_year_old_check: "Can the student see the words federal police power and reject them for ordinary federal legislation?"
+    positive_examples:
+      - qid: Q-CONLAW-001
+        note: "Federal funding statute."
+    negative_examples: []
+    unlocks:
+      traps:
+        - federal_police_power_bait
+      question_shapes:
+        - actor_source_power
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Could overapply to state police power questions."
+    compression_status: keep
+  - id: CONLAW-SPENDING-POWER-01
+    subject: CONSTITUTIONAL_LAW
+    group: A_actor_source_power
+    mechanic_type: tiny_anchor
+    trigger: "Federal statute conditions, grants, or distributes money."
+    visible_signal:
+      location: stem
+      exact_signal: "federal education funds"
+    move: "Use taxing/spending power before police power or free-standing general welfare."
+    contraindications:
+      - "Do not use if no money condition, tax, grant, or spending hook appears."
+    distractor_patterns:
+      - "Federal police power"
+      - "General welfare as free-standing legislative power"
+    cut_clash_call_role: ANCHOR
+    student_script: "Federal money statute: spend power, not police power."
+    ten_year_old_check: "Can the student spot federal money and pick spending power?"
+    positive_examples:
+      - qid: Q-CONLAW-001
+        note: "Need-based aid funding condition."
+    negative_examples: []
+    unlocks:
+      traps:
+        - federal_police_power_bait
+      question_shapes:
+        - actor_source_power
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Could become doctrine summary if expanded beyond money-trigger routing."
+    compression_status: keep
+  - id: CONLAW-CLASSIFICATION-FIRST-01
+    subject: CONSTITUTIONAL_LAW
+    group: C_classification_equal_protection
+    mechanic_type: routing_mechanic
+    trigger: "Law divides people into groups."
+    visible_signal:
+      location: stem
+      exact_signal: "treats English-speaking and non-English-speaking applicants differently"
+    move: "Route first to Equal Protection style analysis, then check actor."
+    contraindications:
+      - "Do not use when the problem is a single-person deprivation with no classification."
+    distractor_patterns:
+      - "Due process answer when classification is the obvious feature"
+    cut_clash_call_role: CUT
+    student_script: "Classification first. Then actor."
+    ten_year_old_check: "Can the student identify the two groups in the facts?"
+    positive_examples:
+      - qid: Q-CONLAW-002
+        note: "Language classification."
+    negative_examples: []
+    unlocks:
+      traps:
+        - due_process_when_ep_classification
+      question_shapes:
+        - classification_equal_protection
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Overapplies when classification is not legally relevant to the call."
+    compression_status: keep
+  - id: CONLAW-FEDERAL-EP-ANALOGUE-01
+    subject: CONSTITUTIONAL_LAW
+    group: C_classification_equal_protection
+    mechanic_type: routing_mechanic
+    trigger: "Federal actor creates a classification."
+    visible_signal:
+      location: stem
+      exact_signal: "federal statute"
+    move: "Use Fifth Amendment Due Process as the equal-protection analogue."
+    contraindications:
+      - "Do not cite Fourteenth Amendment Equal Protection against a federal actor."
+    distractor_patterns:
+      - "Fourteenth Amendment Equal Protection against federal actor"
+    cut_clash_call_role: CUT
+    student_script: "Federal classification uses Fifth Amendment due process."
+    ten_year_old_check: "Can the student match federal actor to Fifth Amendment route?"
+    positive_examples:
+      - qid: Q-CONLAW-002
+        note: "Federal language classification."
+    negative_examples: []
+    unlocks:
+      traps:
+        - wrong_actor_equal_protection
+      question_shapes:
+        - classification_equal_protection
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Can hide needed tier analysis if used as the final answer too early."
+    compression_status: keep
+  - id: CONLAW-PI14-BAIT-01
+    subject: CONSTITUTIONAL_LAW
+    group: F_high_frequency_bait
+    mechanic_type: distractor_frequency_card
+    trigger: "Answer choice uses Fourteenth Amendment Privileges or Immunities to invalidate state action."
+    visible_signal:
+      location: answer_choice
+      exact_signal: "Fourteenth Amendment Privileges or Immunities"
+    move: "Treat as weak unless the facts involve narrow national-citizenship rights."
+    contraindications:
+      - "Do not apply to Article IV Privileges and Immunities."
+      - "Do not apply when travel, voting for national officers, petitioning Congress, assembly, or national political discussion is the actual fact."
+    distractor_patterns:
+      - "P&I 14th offered when Due Process or Equal Protection is stronger"
+    cut_clash_call_role: CALL
+    student_script: "P&I 14th is usually bait."
+    ten_year_old_check: "Can the student check for the narrow listed national-citizenship rights before choosing P&I 14th?"
+    positive_examples:
+      - qid: Q-CONLAW-003
+        note: "No narrow national-citizenship right."
+    negative_examples: []
+    unlocks:
+      traps:
+        - pi14_bait
+      question_shapes:
+        - clause_home
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Confusing Fourteenth Amendment P&I with Article IV P&I."
+    compression_status: keep
+  - id: CONLAW-STATE-ACTION-FIRST-01
+    subject: CONSTITUTIONAL_LAW
+    group: E_threshold_before_merits
+    mechanic_type: routing_mechanic
+    trigger: "Private party conduct appears in a constitutional-rights question."
+    visible_signal:
+      location: stem
+      exact_signal: "private"
+    move: "Check significant government nexus or exclusive public function before merits."
+    contraindications:
+      - "Do not spend time on state action when the government itself enacts the law."
+    distractor_patterns:
+      - "Merits answer before state-action threshold"
+    cut_clash_call_role: CUT
+    student_script: "Threshold first: state action?"
+    ten_year_old_check: "Can the student ask whether government is connected before applying rights?"
+    positive_examples: []
+    negative_examples:
+      - qid: Q-CONLAW-001
+        note: "Congress itself acted; threshold is obvious."
+    unlocks:
+      traps:
+        - merits_before_threshold
+      question_shapes:
+        - threshold
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Wastes time when state action is obvious."
+    compression_status: keep
+  - id: CONLAW-PROPERTY-INTEREST-TRIGGER-01
+    subject: CONSTITUTIONAL_LAW
+    group: E_threshold_before_merits
+    mechanic_type: tiny_anchor
+    trigger: "Public employment or benefits deprivation."
+    visible_signal:
+      location: stem
+      exact_signal: "for cause"
+    move: "Look for tenure, contract, for-cause limit, or law creating a legitimate claim."
+    contraindications:
+      - "Do not treat mere expectation as a property interest."
+    distractor_patterns:
+      - "Mere expectation of continued public employment"
+    cut_clash_call_role: CUT
+    student_script: "Property needs a source: tenure, contract, for cause, or law."
+    ten_year_old_check: "Can the student find the source that makes the job or benefit more than hope?"
+    positive_examples: []
+    negative_examples: []
+    unlocks:
+      traps:
+        - mere_expectation_property
+      question_shapes:
+        - threshold
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "May require an anchor if the source of entitlement is subtle."
+    compression_status: keep
+  - id: CONLAW-SPEECH-PERMIT-DISCRETION-01
+    subject: CONSTITUTIONAL_LAW
+    group: E_threshold_before_merits
+    mechanic_type: routing_mechanic
+    trigger: "Permit or license required before speech or demonstration."
+    visible_signal:
+      location: stem
+      exact_signal: "permit"
+    move: "Check narrow, specific standards that limit official discretion."
+    contraindications:
+      - "Do not use for post-speech punishment questions without permit facts."
+    distractor_patterns:
+      - "Permit scheme with broad official discretion"
+    cut_clash_call_role: CLASH
+    student_script: "Speech permit needs narrow standards."
+    ten_year_old_check: "Can the student find whether the permit rule tells officials exactly when to say no?"
+    positive_examples: []
+    negative_examples: []
+    unlocks:
+      traps:
+        - broad_speech_permit_discretion
+      question_shapes:
+        - threshold
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Can overexpand into full First Amendment doctrine."
+    compression_status: keep
+  - id: CONLAW-SAME-SEX-MARRIAGE-EP-01
+    subject: CONSTITUTIONAL_LAW
+    group: G_tiny_anchors
+    mechanic_type: tiny_anchor
+    trigger: "Law forbids or materially disadvantages same-sex marriage."
+    visible_signal:
+      location: stem
+      exact_signal: "same-sex marriage"
+    move: "Assume Equal Protection violation for MBE purposes."
+    contraindications:
+      - "Do not use for unrelated sexuality classifications without marriage disadvantage facts."
+    distractor_patterns:
+      - "Answer treating same-sex marriage disadvantage as valid by default"
+    cut_clash_call_role: ANCHOR
+    student_script: "Same-sex marriage disadvantage loses."
+    ten_year_old_check: "Can the student spot same-sex marriage disadvantage and apply the anchor?"
+    positive_examples: []
+    negative_examples: []
+    unlocks:
+      traps:
+        - same_sex_marriage_valid_by_default
+      question_shapes:
+        - classification_equal_protection
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "May become too broad outside marriage."
+    compression_status: keep
+  - id: CONLAW-CONTRACTS-CLAUSE-PREDATE-01
+    subject: CONSTITUTIONAL_LAW
+    group: B_clause_home
+    mechanic_type: routing_mechanic
+    trigger: "Contracts Clause or contract-obligation issue."
+    visible_signal:
+      location: stem
+      exact_signal: "contract predates"
+    move: "Check whether the contract predates the statute before analyzing impairment."
+    contraindications:
+      - "Do not use when there is no statute affecting contract obligations."
+    distractor_patterns:
+      - "Contracts Clause answer without preexisting contract"
+    cut_clash_call_role: CUT
+    student_script: "Contracts Clause: contract first, statute second."
+    ten_year_old_check: "Can the student put contract date before statute date?"
+    positive_examples: []
+    negative_examples: []
+    unlocks:
+      traps:
+        - no_preexisting_contract
+      question_shapes:
+        - clause_home
+    status: candidate
+    evidence:
+      fixes_misses: []
+      dominant_trap_rejections: []
+      transfer_passes: []
+      negative_examples: []
+      ablation: {}
+    failure_modes:
+      - "Can be confused with ordinary contract law."
+    compression_status: keep
+

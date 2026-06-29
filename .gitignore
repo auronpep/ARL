@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# Private study source material and generated runs.
+data/private/
+runs/
+reports/*.md
+
+# Keep project rules tracked.
+!AGENTS.md

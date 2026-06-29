@@ -1,0 +1,25 @@
+subject: CONSTITUTIONAL_LAW
+fit: "Constitutional Law = claim categorization + tier/burden consistency."
+student_mantra: "Claim home first. Burden follows tier. Threshold beats merits."
+dominant_question_shapes:
+  - validity of statute
+  - best argument for upholding or invalidating statute
+  - actor/right/classification/tier/burden arrays
+dominant_cut_patterns:
+  - wrong actor
+  - burden-tier mismatch
+  - fundamental-right inflation
+  - doctrine-home outlier
+dominant_clash_patterns:
+  - tier x burden matrix
+  - doctrine-home array
+  - state-action threshold pair
+dominant_call_patterns:
+  - threshold before merits
+  - burden-tier consistency
+  - default tier unless trigger appears
+tiny_anchors:
+  - federal police power is bait
+  - P&I 14th is usually weak or bait
+  - federal EP analogue routes through Fifth Amendment Due Process
+

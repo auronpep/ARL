@@ -1,0 +1,14 @@
+{
+  "mutation_id": "MUT-CONLAW-0001",
+  "hypothesis": "Tightening the student script clarifies federal spending questions.",
+  "target_metric": "child_usable_trace_rate",
+  "operation": "update_card_field",
+  "card_id": "CONLAW-SPENDING-POWER-01",
+  "field": "student_script",
+  "value": "Federal money condition: spending power, not police power.",
+  "expected_fix": {
+    "trap": "Federal police power chosen for a spending statute.",
+    "question_ids": ["Q-CONLAW-001"]
+  },
+  "rollback": "Restore prior student_script."
+}

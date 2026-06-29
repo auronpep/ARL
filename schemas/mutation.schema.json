@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ARL Mechanics Pack Mutation",
+  "type": "object",
+  "required": ["mutation_id", "hypothesis", "target_metric", "operation", "rollback"],
+  "properties": {
+    "mutation_id": { "type": "string" },
+    "hypothesis": { "type": "string" },
+    "target_metric": { "type": "string" },
+    "operation": {
+      "enum": [
+        "add_card",
+        "update_card_field",
+        "split_card",
+        "merge_cards",
+        "retire_card",
+        "promote_card",
+        "add_example",
+        "add_contraindication",
+        "shorten_student_script"
+      ]
+    },
+    "card_id": { "type": "string" },
+    "field": { "type": "string" },
+    "value": true,
+    "expected_fix": { "type": "object" },
+    "rollback": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ARL Solver Answer Trace",
+  "type": "object",
+  "required": ["question_id", "answer", "confidence", "phase_used", "mechanic_ids_used", "eliminations", "deciding_fact", "student_script"],
+  "properties": {
+    "question_id": { "type": "string" },
+    "answer": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "phase_used": { "type": "string" },
+    "mechanic_ids_used": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "eliminations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["filter", "reason"],
+        "properties": {
+          "filter": { "type": "string" },
+          "reason": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "dominant_trap_rejected": { "type": "boolean" },
+    "dominant_trap_rejection_reason": { "type": "string" },
+    "deciding_fact": { "type": "string" },
+    "student_script": { "type": "string" },
+    "hidden_doctrine_count": { "type": "integer", "minimum": 0 },
+    "answer_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mechanic_id": { "type": "string" },
+          "text": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

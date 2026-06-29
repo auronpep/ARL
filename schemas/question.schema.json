@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ARL Con Law Question",
+  "type": "object",
+  "required": ["id", "subject", "call", "stem", "choices", "answer"],
+  "properties": {
+    "id": { "type": "string" },
+    "subject": { "const": "CONSTITUTIONAL_LAW" },
+    "topic": { "type": "string" },
+    "subtopic": { "type": "string" },
+    "outline_code": { "type": "string" },
+    "call": { "type": "string" },
+    "stem": { "type": "string" },
+    "choices": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "answer": { "type": "string" },
+    "dominant_trap_choice": { "type": "string" },
+    "dominant_trap_mechanic": { "type": "string" },
+    "dominant_trap_pick_rate": { "type": "number" },
+    "expected_phase": { "type": "string" },
+    "expected_axis": { "type": "string" },
+    "expected_dispositive_fact": { "type": "string" },
+    "expected_mechanic_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "question_shape": { "type": "string" },
+    "surface_cluster": { "type": "string" },
+    "transfer_cluster": { "type": "string" },
+    "difficulty_band": { "type": "string" }
+  },
+  "additionalProperties": true
+}

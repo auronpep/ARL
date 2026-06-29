@@ -1,0 +1,15 @@
+version: "0.1"
+items:
+  - inbox_id: INBOX-CONLAW-0001
+    source_type: strategy_book
+    source_ref: "Con Law strategy examples from project direction"
+    raw_strategy_note: "When validity of a law is asked, identify federal vs state actor first."
+    candidate_trigger: "Call asks whether a statute is valid."
+    candidate_move: "Identify actor first."
+    candidate_trap: "Federal police power or wrong amendment against wrong actor."
+    candidate_student_script: "Validity question: actor first."
+    proposed_card_type: routing_mechanic
+    merge_candidate: CONLAW-ACTOR-FIRST-01
+    promote_to_pack: false
+    notes: "Needs real-question evidence before promotion."
+

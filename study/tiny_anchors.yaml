@@ -1,0 +1,16 @@
+version: "0.1"
+subject: CONSTITUTIONAL_LAW
+anchors:
+  - id: FEDERAL_POLICE_POWER_BAIT
+    script: "Federal police power is bait."
+    linked_cards:
+      - CONLAW-FEDERAL-POLICE-POWER-BAIT-01
+  - id: PI14_USUALLY_BAIT
+    script: "P&I 14th is usually bait."
+    linked_cards:
+      - CONLAW-PI14-BAIT-01
+  - id: FEDERAL_EP_FIFTH_AMENDMENT
+    script: "Federal classification uses Fifth Amendment due process."
+    linked_cards:
+      - CONLAW-FEDERAL-EP-ANALOGUE-01
+
