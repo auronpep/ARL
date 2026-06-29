@@ -91,19 +91,54 @@ Review:
 
 ## 2026-06-29 LM Studio Model Debug
 
-- [ ] Inspect ARL model/client configuration for LM Studio compatibility.
-- [ ] Probe LM Studio on `http://127.0.0.1:5632` and confirm loaded models.
-- [ ] Fix only the failing config or API shape needed to get one local response.
-- [ ] Run the smallest verification request and record proof.
-
-## 2026-06-29 LM Studio Private Network API Fix
-
-- [ ] Start LM Studio API server on port 5962 bound to local network.
-- [ ] Verify local API reachability at `http://127.0.0.1:5962/v1/models`.
-- [ ] Verify LAN-IP reachability at `http://192.168.1.112:5962/v1/models`.
-- [ ] Add Private firewall allow rule only if the running server is blocked.
-- [ ] Record final status and base URL guidance.
+- [x] Inspect ARL model/client configuration for LM Studio compatibility.
+- [x] Probe LM Studio on `http://127.0.0.1:5632` and identify the active server port.
+- [x] Confirm OpenAI-compatible chat completions with the loaded model.
+- [x] Run the smallest solver-wrapper verification request and record proof.
 
 Review:
 
-- Pending.
+- `http://127.0.0.1:5632/v1/models` refused connections; the active LM Studio listener is `0.0.0.0:5962`.
+- `http://127.0.0.1:5962/v1/models` and `http://192.168.1.112:5962/v1/models` both returned one loaded model: `qwythos-9b-claude-mythos-5-1m`.
+- Direct `/v1/chat/completions` proof returned assistant content `READY` when `max_tokens` was raised to 256; a 32-token request returned empty content because Qwythos spent the budget in `reasoning_content`.
+- Python helper proof: `run_lm_studio('Reply only READY.', ...)` returned model `qwythos-9b-claude-mythos-5-1m` and content `READY`.
+- CLI smoke proof: `uv run python tools\run_solver.py --execute-lm-studio ... --max-tokens 512` wrote `runs\selftest\lmstudio_smoke_output.txt`; 512 tokens proved the command path but truncated the JSON answer, so real runs should use `--max-tokens 4096` or higher.
+- Test proof: `uv run pytest` passed 11 tests.
+
+## 2026-06-29 LM Studio Private Network API Fix
+
+- [x] Start LM Studio API server on port 5962 bound to local network.
+- [x] Verify local API reachability at `http://127.0.0.1:5962/v1/models`.
+- [x] Verify LAN-IP reachability at `http://192.168.1.112:5962/v1/models`.
+- [x] Skip Private firewall allow rule because the running server is not blocked.
+- [x] Record final status and base URL guidance.
+
+Review:
+
+- `lms server start --port 5962 --bind 0.0.0.0` returned success; `lms server status` reports port 5962.
+- Listener proof: `0.0.0.0:5962` is owned by `LM Studio`.
+- Local proof: `http://127.0.0.1:5962/v1/models` returned HTTP 200, model count 1, first model `qwythos-9b-claude-mythos-5-1m`.
+- LAN proof from host: `http://192.168.1.112:5962/v1/models` returned HTTP 200 with the same model.
+- Remote proof from `HAILKINGJESUS`: TCP 5962 open and HTTP 200 from `http://192.168.1.112:5962/v1/models`.
+- Firewall fallback was not needed: existing enabled Private inbound allow rules exist for `lm studio.exe`; no new firewall rule was created.
+- `JESUSISKING` PowerShell remoting returned access denied, so it was not used for proof.
+- `169.254.83.107:5962` still fails TCP reachability and should not be used for this setup.
+- Use `http://127.0.0.1:5962/v1` on `PRAISEJESUS`; use `http://192.168.1.112:5962/v1` from other PCs on the Wi-Fi LAN.
+
+## 2026-06-29 Intelligent Solver Backend
+
+- [x] Add prompt builder that strips answer keys, expected mechanics, dominant-trap labels, and private explanations before model execution.
+- [x] Add model-response parser for JSON objects inside plain text or Markdown fences.
+- [x] Add answer normalizer that enforces ARL answer-trace fields.
+- [x] Wire `tools/run_loop.py` to use `--solver lm-studio`.
+- [x] Verify with unit tests and a local LM Studio availability check.
+
+Review:
+
+- Main module: `arl/intelligent_solver.py`
+- Local model client: `arl/lm_studio.py`
+- Loop command:
+  - `uv run python tools\run_loop.py --questions data\private\conlaw\questions_dev.jsonl --pack study\mechanics_pack.yaml --out-dir runs\conlaw_set1_lmstudio --iterations 50 --solver lm-studio --lm-studio-base-url http://127.0.0.1:5962 --max-tokens 4096`
+- Prompt safety test confirms `private_notes`, `dominant_trap_choice`, and `expected_mechanic_ids` are not sent to the model.
+- `uv run pytest` passed after implementation.
+- LM Studio server check: `http://127.0.0.1:5962/v1/models` is reachable, but currently returns no chat model in `data`; load a chat model before running the LM Studio loop.

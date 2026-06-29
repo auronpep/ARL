@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from arl.io import load_jsonl, write_json, write_jsonl
+from arl.intelligent_solver import solve_question_with_provider
 from arl.pack import load_pack
 from arl.scoring import score_run
 from arl.select_questions import select_questions
@@ -16,6 +17,7 @@ def run_loop(
     pack_path: str | Path,
     out_dir: str | Path,
     iterations: int = 50,
+    answer_provider=None,
 ) -> dict[str, Any]:
     questions_path = Path(questions_path)
     out_dir = Path(out_dir)
@@ -37,7 +39,7 @@ def run_loop(
             break
         selected = candidates[0]
         question = questions[selected["id"]]
-        answer = solve_question(question, pack)
+        answer = solve_question_with_provider(question, pack, answer_provider) if answer_provider else solve_question(question, pack)
 
         is_correct = answer["answer"] == question.get("answer")
         selected_questions.append({**selected, "iteration": iteration})
@@ -82,4 +84,3 @@ def run_loop(
     write_json(out_dir / "trace.json", trace)
     write_json(out_dir / "loop_summary.json", summary)
     return summary
-
