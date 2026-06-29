@@ -1,6 +1,10 @@
 from pathlib import Path
+import json
+import os
 import subprocess
 import sys
+import urllib.error
+import urllib.request
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -18,6 +22,57 @@ def build_prompt(questions: str, pack: str, tiny_anchors: str, script: str) -> s
     )
 
 
+def normalize_lm_studio_base_url(base_url: str) -> str:
+    base_url = base_url.rstrip("/")
+    if base_url.endswith("/v1"):
+        return base_url[:-3]
+    return base_url
+
+
+def request_json(url: str, payload: dict | None = None, timeout_sec: int = 600) -> dict:
+    data = None if payload is None else json.dumps(payload).encode("utf-8")
+    request = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout_sec) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as error:
+        body = error.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"LM Studio HTTP {error.code}: {body}") from error
+
+
+def resolve_lm_studio_model(base_url: str, requested_model: str | None, timeout_sec: int) -> str:
+    if requested_model:
+        return requested_model
+
+    models = request_json(f"{base_url}/v1/models", timeout_sec=timeout_sec)
+    loaded = models.get("data", [])
+    if not loaded:
+        raise RuntimeError("LM Studio has no loaded models. Load one in LM Studio, then retry.")
+    # ponytail: first loaded model is enough for this local one-model workflow.
+    return loaded[0]["id"]
+
+
+def extract_chat_content(response: dict) -> str:
+    return response["choices"][0]["message"].get("content", "")
+
+
+def run_lm_studio(prompt: str, base_url: str, model: str | None, max_tokens: int, timeout_sec: int) -> tuple[str, str]:
+    base_url = normalize_lm_studio_base_url(base_url)
+    model = resolve_lm_studio_model(base_url, model, timeout_sec)
+    response = request_json(
+        f"{base_url}/v1/chat/completions",
+        {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0,
+            "max_tokens": max_tokens,
+            "stream": False,
+        },
+        timeout_sec=timeout_sec,
+    )
+    return extract_chat_content(response), model
+
+
 def main() -> int:
     import argparse
 
@@ -28,7 +83,15 @@ def main() -> int:
     parser.add_argument("--script", default="study/exam_day_scripts/conlaw_script.md")
     parser.add_argument("--out", required=True)
     parser.add_argument("--execute-codex", action="store_true")
+    parser.add_argument("--execute-lm-studio", action="store_true")
+    parser.add_argument("--lm-studio-base-url", default=os.environ.get("LM_STUDIO_BASE_URL", "http://127.0.0.1:5962"))
+    parser.add_argument("--model", default=os.environ.get("LM_STUDIO_MODEL"))
+    parser.add_argument("--max-tokens", type=int, default=int(os.environ.get("LM_STUDIO_MAX_TOKENS", "4096")))
+    parser.add_argument("--timeout-sec", type=int, default=600)
     args = parser.parse_args()
+    if args.execute_codex and args.execute_lm_studio:
+        parser.error("choose only one execution backend")
+
     prompt = build_prompt(args.questions, args.pack, args.tiny_anchors, args.script)
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -36,6 +99,11 @@ def main() -> int:
         result = subprocess.run(["codex", "exec", "-C", str(Path.cwd()), prompt], text=True, capture_output=True, check=False)
         out.write_text(result.stdout, encoding="utf-8")
         return result.returncode
+    if args.execute_lm_studio:
+        content, model = run_lm_studio(prompt, args.lm_studio_base_url, args.model, args.max_tokens, args.timeout_sec)
+        out.write_text(content.strip() + "\n", encoding="utf-8")
+        print(f"wrote LM Studio output: {out} ({model})")
+        return 0
     out.write_text(prompt, encoding="utf-8")
     print(f"wrote prompt: {out}")
     return 0
@@ -43,4 +111,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

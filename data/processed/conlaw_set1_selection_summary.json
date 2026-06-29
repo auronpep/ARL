@@ -1,0 +1,18 @@
+{
+  "loop_artifacts": {
+    "answers": 50,
+    "attempt_history": 50,
+    "selected_questions": 50
+  },
+  "loop_summary_file": "data/processed/conlaw_set1_loop50_summary.json",
+  "question_sets": {
+    "dev_set": 117,
+    "full_set": 146,
+    "holdout_set": 29
+  },
+  "selection_manifests": {
+    "dev_set_selected": 117,
+    "full_set_selected": 146,
+    "holdout_set_selected": 29
+  }
+}

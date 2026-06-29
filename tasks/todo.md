@@ -67,3 +67,43 @@ Review:
 - Markdown strategy extraction produced 10 private candidate mechanics signals.
 - `git check-ignore -v` confirmed private source and generated question files are ignored by `.gitignore`.
 - `uv run pytest` passed: 9 tests.
+
+## 2026-06-29 Loop 50 Run
+
+- [x] Add deterministic pack-only solver.
+- [x] Add 50-iteration loop runner.
+- [x] Select/process all Con Law Set 1 question sets.
+- [x] Complete 50 solver iterations on the private dev set.
+- [x] Verify tests, ignored run artifacts, and public summaries.
+
+Review:
+
+- Loop tool: `tools/run_loop.py`
+- Solver logic: `arl/solver.py`
+- Loop runner: `arl/loop.py`
+- Private run directory: `runs/conlaw_set1_loop50`
+- Public loop summary: `data/processed/conlaw_set1_loop50_summary.json`
+- Public selection summary: `data/processed/conlaw_set1_selection_summary.json`
+- Set selection counts: full set 146/146, dev set 117/117, holdout set 29/29.
+- Solver loop counts: 50 requested, 50 completed, 50 selected questions, 50 answers, 50 attempt-history rows.
+- Loop score on the private dev iteration set: accuracy `0.16`, dominant-trap rejection `1.0`, mechanic trace coverage `1.0`, child-usable trace rate `0.08`, hidden doctrine count `0`.
+- Interpretation: the loop infrastructure is operational; the current deterministic solver is intentionally minimal and exposes the next required improvement area.
+
+## 2026-06-29 LM Studio Model Debug
+
+- [ ] Inspect ARL model/client configuration for LM Studio compatibility.
+- [ ] Probe LM Studio on `http://127.0.0.1:5632` and confirm loaded models.
+- [ ] Fix only the failing config or API shape needed to get one local response.
+- [ ] Run the smallest verification request and record proof.
+
+## 2026-06-29 LM Studio Private Network API Fix
+
+- [ ] Start LM Studio API server on port 5962 bound to local network.
+- [ ] Verify local API reachability at `http://127.0.0.1:5962/v1/models`.
+- [ ] Verify LAN-IP reachability at `http://192.168.1.112:5962/v1/models`.
+- [ ] Add Private firewall allow rule only if the running server is blocked.
+- [ ] Record final status and base URL guidance.
+
+Review:
+
+- Pending.
