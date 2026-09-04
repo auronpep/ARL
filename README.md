@@ -16,3 +16,7 @@ V0 builds the scoring and mutation loop around a mutable mechanics pack:
 - `study/exam_day_scripts/conlaw_script.md`
 
 Private books, questions, answer keys, explanations, attempts, and run outputs stay out of Git under `data/private/` and `runs/`.
+
+## Maintainers
+
+- auronpep (owner)
